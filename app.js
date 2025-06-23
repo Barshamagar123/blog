@@ -30,6 +30,7 @@ app.get("/blogs-details/:id",async(request,response)=>{
 app.get("/add-blog", (request, response) => {
     response.render("blogs/add-blog.ejs")
 });
+
 app.get("/edit-blog/:id",async(request,response)=>{
     const id=request.params.id
     const addBlogs=await db.addBlogs.findAll({
@@ -126,7 +127,7 @@ app.get("/delete/:id",async(request,response)=>{
 app.get("/logout",(request,response)=>{
     response.render("./authentication/login.ejs")
 })
-app.post("/edit-blog/:id",async(request, respone)=>{
+app.post("/edit-blog/:id",async(request,response)=>{
     const id=request.params.id
   const {title,author,category,status,date,content} = request.body
     await  db.addBlogs.update({
@@ -141,7 +142,7 @@ content:content,
             id:id
         }
     })
-    response.redirect("./dashboard/posts.ejs")
+    response.send("updated succesfyylyy")
 })
 app.post('/logout',(request,response)=>{
     response.clearCookie('token')
