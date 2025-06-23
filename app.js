@@ -75,7 +75,7 @@ category:category,
 status:status,
 date:date,
 content:content,
-image:request.file.filename,
+image:"http://localhost:3000/" + request.file.filename,
 registerId:registerId
     })
     response.send("added successfully")
