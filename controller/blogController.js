@@ -1,10 +1,11 @@
 const db = require("../database/db")
+const bcrypt=require('bcrypt')
+const jwt=require('jsonwebtoken')
 
 exports.renderHome=(request,response)=>{
     response.render("home.ejs")
 }
 exports.renderAdmin=async (request,response)=>{
-
     response.render("./admin/dashboard.ejs")
 }
 
@@ -103,3 +104,28 @@ exports.renderAdmin=async (request,response)=>{
           response.status(500).send("Server Error");
       }
   }
+  exports.renderAdd=(request, response) => {
+    response.render("blogs/add-blog.ejs")
+}
+exports.renderEditPage=async(request,response)=>{
+    const id=request.params.id
+    const addBlogs=await db.addBlogs.findAll({
+        where:{
+            id:id
+        }
+    })
+    response.render("./blogs/edit-blog.ejs",{addBlogs: addBlogs})
+}
+exports.renderLoginPage=(request,response)=>{
+    response.render("./authentication/login.ejs")
+}
+exports.renderDashboard=(request,response)=>{
+    response.render("./admin/dashboard.ejs")
+}
+exports.renderPost=async(request,response)=>{
+    const blogss=await db.addBlogs.findAll()
+    response.render("./dashboard/posts.ejs",{datas:blogss})
+}
+exports.renderRegisterPage=(request,response)=>{
+    response.render("./authentication/register.ejs")
+}
