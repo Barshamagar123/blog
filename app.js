@@ -8,7 +8,9 @@ app.set("view engine","ejs")
 const cookieParser=require("cookie-parser")
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
-
+app.use(express.static("./storage/"))
+const {multer,storage}=require('./middleware/multerConfig')
+const upload = multer({storage:storage})
 app.get("/",(request,response)=>{
     response.render("home.ejs")
 })
@@ -16,22 +18,37 @@ app.get("/admin",isLogged,async (request,response)=>{
 
     response.render("./admin/dashboard.ejs")
 })
+app.get("/blogs-details/:id",async(request,response)=>{
+    const id=request.params.id
+     const blogss=await db.addBlogs.findAll({
+        where: {
+            id:id
+        }
+     })
+    response.render("./blogs/blogs-details.ejs",{datas:blogss})
+})
 app.get("/add-blog", (request, response) => {
-    response.render("blogs/add-blog.ejs"); // ✅ Correct file
+    response.render("blogs/add-blog.ejs")
 });
-// Example: If `/post` renders posts.ejs
+app.get("/edit-blog/:id",async(request,response)=>{
+    const id=request.params.id
+    const addBlogs=await db.addBlogs.findAll({
+        where:{
+            id:id
+        }
+    })
+    response.render("./blogs/edit-blog.ejs",{addBlogs: addBlogs})
+})
 app.get("/blogs", async (request, response) => {
     try {
-        const blogss = await db.addBlogs.findAll(); // Fetch blogs from DB
-        response.render("./blogs/display-blog", { datas: blogss }); // Pass as `datas`
+        const blogss = await db.addBlogs.findAll();
+        response.render("./blogs/display-blog", { datas: blogss }); 
     } catch (err) {
         console.error(err);
         response.status(500).send("Server Error");
     }
 });
 app.get("/login",(request,response)=>{
-   
-      
     response.render("./authentication/login.ejs")
 })
 app.get("/dashboard.ejs",(request,response)=>{
@@ -47,9 +64,10 @@ app.get("/register",(request,response)=>{
 app.get("/addcategory",(request,response)=>{
     response.render("./blogs/categoryadd.ejs")
 })
-app.post("/add-blog",async (request,response)=>{
+app.post("/add-blog",upload.single('image'),async (request,response)=>{
+    // console.log(request.file)
     const registerId=request.registerId
-    const {title,author,category,status,date,content} = request.body
+    const {title,author,category,status,date,content,image} = request.body
   await  db.addBlogs.create({
 title:title,
 author:author,
@@ -57,6 +75,7 @@ category:category,
 status:status,
 date:date,
 content:content,
+image:request.file.filename,
 registerId:registerId
     })
     response.send("added successfully")
@@ -103,6 +122,29 @@ app.get("/delete/:id",async(request,response)=>{
         }
     })
     response.send("deleted succesfulyy")
+})
+app.get("/logout",(request,response)=>{
+    response.render("./authentication/login.ejs")
+})
+app.post("/edit-blog/:id",async(request, respone)=>{
+    const id=request.params.id
+  const {title,author,category,status,date,content} = request.body
+    await  db.addBlogs.update({
+title:title,
+author:author,
+category:category,
+status:status,
+date:date,
+content:content,
+    },{
+        where:{
+            id:id
+        }
+    })
+    response.redirect("./dashboard/posts.ejs")
+})
+app.post('/logout',(request,response)=>{
+    response.clearCookie('token')
 })
 app.listen(3000,function(){
     console.log("backend has started at port number 3000")

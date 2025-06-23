@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <%- include('../partials/navbar.ejs') %>
+
+  <div class="container mx-auto px-4 py-12 max-w-5xl">
+    <!-- Back Button -->
+    <div class="mb-8">
+      <a href="/blogs" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 transition-colors font-medium">
+        <i class="fas fa-arrow-left"></i> 
+        <span>Back to Blogs</span>
+      </a>
+    </div>
+   
+    <% datas.forEach(function(addBlog) { %>
+    <!-- Blog Content -->
+    <article class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+      <!-- Thumbnail -->
+      <div class="relative aspect-[16/9]">
+        <img src="<%- addBlog.image %>"
+             alt="Blog thumbnail"
+             class="w-full h-full object-cover"/>
+        <div class="absolute top-4 left-4">
+          <span class="bg-primary-600 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md">
+            <%- addBlog.category %>
+          </span>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-8 md:p-10">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
+          <%- addBlog.title %>
+        </h1>
+        
+        <!-- Author & Date -->
+        <div class="flex flex-wrap gap-4 text-sm text-gray-500 mb-8">
+          <div class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full">
+            <i class="fas fa-user text-primary-600"></i>
+            <span class="font-medium"><%- addBlog.author %></span>
+          </div>
+          <div class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full">
+            <i class="fas fa-calendar text-primary-600"></i>
+            <span><%- addBlog.date %></span>
+          </div>
+          <div class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full">
+            <i class="fas fa-clock text-primary-600"></i>
+            <span>5 min read</span>
+          </div>
+        </div>
+
+        <!-- Full Content -->
+        <div class="prose max-w-none text-gray-700 prose-p:mb-5 prose-p:leading-relaxed 
+                  prose-headings:mt-8 prose-headings:mb-4 prose-headings:font-bold prose-headings:text-gray-900
+                  prose-a:text-primary-600 prose-a:font-medium prose-a:underline prose-img:rounded-lg prose-img:shadow-md
+                  prose-img:my-6 prose-blockquote:border-l-4 prose-blockquote:border-primary-600 prose-blockquote:pl-4
+                  prose-blockquote:italic prose-blockquote:text-gray-600">
+          <%- addBlog.content %>
+        </div>
+      </div>
+    </article>
+    <% }) %>
+
+    <!-- Comments Section -->
+    <div class="mt-16">
+      <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+        <h3 class="text-2xl font-bold text-gray-900 mb-8 pb-2 border-b border-gray-200">
+          <i class="fas fa-comments text-primary-600 mr-2"></i>
+          Comments (3)
+        </h3>
+        
+        <!-- Comment List -->
+        <div class="space-y-6">
+          <!-- Sample Comment 1 -->
+          <div class="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+            <div class="flex items-start gap-4 mb-3">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" 
+                   class="w-10 h-10 rounded-full object-cover border-2 border-primary-100" 
+                   alt="User"/>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-medium text-gray-900">Jane Doe</span>
+                  <span class="text-xs bg-primary-100 text-primary-800 px-2 py-0.5 rounded-full">Author</span>
+                </div>
+                <span class="text-xs text-gray-500">2 days ago</span>
+              </div>
+            </div>
+            <p class="text-gray-700 pl-14">Great post! The section about responsive design was particularly helpful.</p>
+            <div class="flex gap-3 pl-14 mt-3">
+              <button class="text-xs text-gray-500 hover:text-primary-600">
+                <i class="fas fa-reply mr-1"></i> Reply
+              </button>
+              <button class="text-xs text-gray-500 hover:text-primary-600">
+                <i class="fas fa-thumbs-up mr-1"></i> Like (5)
+              </button>
+            </div>
+          </div>
+
+          <!-- Sample Comment 2 -->
+          <div class="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+            <div class="flex items-start gap-4 mb-3">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" 
+                   class="w-10 h-10 rounded-full object-cover border-2 border-primary-100" 
+                   alt="User"/>
+              <div>
+                <span class="font-medium text-gray-900">John Smith</span>
+                <span class="block text-xs text-gray-500">1 week ago</span>
+              </div>
+            </div>
+            <p class="text-gray-700 pl-14">Thanks for sharing this valuable information. Looking forward to more content like this!</p>
+            <div class="flex gap-3 pl-14 mt-3">
+              <button class="text-xs text-gray-500 hover:text-primary-600">
+                <i class="fas fa-reply mr-1"></i> Reply
+              </button>
+              <button class="text-xs text-gray-500 hover:text-primary-600">
+                <i class="fas fa-thumbs-up mr-1"></i> Like (2)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Comment Form -->
+        <div class="mt-10">
+          <h4 class="text-lg font-bold text-gray-900 mb-6">Leave a comment</h4>
+          <form class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input type="text" id="name" 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="email" 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+              </div>
+            </div>
+            <div>
+              <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Comment</label>
+              <textarea id="comment" rows="4"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent" 
+                        placeholder="Share your thoughts..."></textarea>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <input id="remember" type="checkbox" 
+                       class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                <label for="remember" class="ml-2 block text-sm text-gray-700">
+                  Notify me of follow-up comments
+                </label>
+              </div>
+              <button type="submit" 
+                      class="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors shadow-md">
+                Post Comment
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+      
+
+    </div>
+  </div>
+
+  <%- include('../partials/footer.ejs') %>
+</body>
+</html>
